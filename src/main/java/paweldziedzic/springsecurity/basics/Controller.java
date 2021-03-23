@@ -21,13 +21,13 @@ public class Controller {
     @GetMapping("/helloSomebody")
     public String helloStrange(Principal principal) {
         if (principal == null)
-            return "Hello, somebody";
+            return "Hello, strange";
         return "Hello " + principal.getName();
     }
 
-    @GetMapping("/papa")
+    @GetMapping("/bye")
     public String papa() {
-        return "Papa";
+        return "Bye";
     }
 
     @GetMapping("/helloUser")

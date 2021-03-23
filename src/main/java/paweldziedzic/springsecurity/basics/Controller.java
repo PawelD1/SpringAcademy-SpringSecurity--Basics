@@ -1,18 +1,19 @@
 package paweldziedzic.springsecurity.basics;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.HashMap;
 
 
 @RestController
 public class Controller {
 
+
     private final UsersService usersService;
 
+    @Autowired
     public Controller(UsersService usersService) {
         this.usersService = usersService;
     }
@@ -20,8 +21,8 @@ public class Controller {
     @GetMapping("/helloSomebody")
     public String helloStrange(Principal principal) {
         if (principal == null)
-            return "Cześć, nieznajomy";
-        return "Cześć " + principal.getName();
+            return "Hello, somebody";
+        return "Hello " + principal.getName();
     }
 
     @GetMapping("/papa")
@@ -31,14 +32,14 @@ public class Controller {
 
     @GetMapping("/helloUser")
     public String forUser(Principal principal) {
-        HashMap<String, Integer> users = usersService.getUsers();
-        users = usersService.checkUsers(users, principal);
-        return "Cześć, user " + principal.getName() + ", logowałeś się już " + users.get(principal.getName()) + " raz(y)";
+        int counterAuth = usersService.calculateNumberOfAuth(principal);
+        int counterVisitStartPage = usersService.calculateNumberOfVisitsStartPage(principal);
+        return "Hello user " + principal.getName() + ", you have been authenticated "+ counterAuth + " time(s)"+
+                " and you visited Start page " + counterVisitStartPage + " time(s)";
     }
 
     @GetMapping("/helloAdmin")
     public String forAdmin(Principal principal) {
         return "Cześć, admin " + principal.getName();
     }
-
 }
